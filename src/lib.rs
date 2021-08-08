@@ -6,6 +6,7 @@ mod lite_parse;
 mod parse_error;
 mod parser;
 mod parser_state;
+mod script;
 mod signature;
 mod span;
 mod syntax_highlight;
@@ -22,6 +23,7 @@ pub use parser::{
     Block, Call, Expr, Expression, Import, Pipeline, Statement, SyntaxShape, VarDecl,
 };
 pub use parser_state::{BlockId, DeclId, ParserState, ParserWorkingSet, VarId};
+pub use script::process_script;
 pub use signature::Signature;
 pub use span::Span;
 pub use syntax_highlight::NuHighlighter;
