@@ -4,8 +4,7 @@ use engine_q::{
     eval_block, NuHighlighter, ParserState, ParserWorkingSet, Signature, Stack, State, SyntaxShape,
 };
 
-fn main() -> std::io::Result<()> {
-    let parser_state = Rc::new(RefCell::new(ParserState::new()));
+fn init(parser_state: &Rc<RefCell<ParserState>>) {
     let delta = {
         let parser_state = parser_state.borrow();
         let mut working_set = ParserWorkingSet::new(&*parser_state);
@@ -76,13 +75,6 @@ fn main() -> std::io::Result<()> {
             Signature::build("benchmark").required("block", SyntaxShape::Block, "the block to run");
         working_set.add_decl(sig.into());
 
-        // let sig = Signature::build("foo").named("--jazz", SyntaxShape::Int, "jazz!!", Some('j'));
-        // working_set.add_decl(sig.into());
-
-        // let sig = Signature::build("bar")
-        //     .named("--jazz", SyntaxShape::Int, "jazz!!", Some('j'))
-        //     .switch("--rock", "rock!!", Some('r'));
-        // working_set.add_decl(sig.into());
         let sig = Signature::build("exit");
         working_set.add_decl(sig.into());
         let sig = Signature::build("vars");
@@ -110,6 +102,12 @@ fn main() -> std::io::Result<()> {
     {
         ParserState::merge_delta(&mut *parser_state.borrow_mut(), delta);
     }
+}
+
+fn main() -> std::io::Result<()> {
+    let parser_state = Rc::new(RefCell::new(ParserState::new()));
+
+    init(&parser_state);
 
     if let Some(path) = std::env::args().nth(1) {
         let parser_state = parser_state;
